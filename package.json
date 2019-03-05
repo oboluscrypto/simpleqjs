@@ -5,7 +5,6 @@
   "author": "<mau+simpleqjs@obolus.com>",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.413.0",
-    "ws": "^6.0.0"
+    "aws-sdk": "^2.413.0"
   }
 }
