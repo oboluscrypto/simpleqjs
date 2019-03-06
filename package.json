@@ -2,7 +2,7 @@
   "name": "simpleqsjs",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "<mau+simpleqjs@obolus.com>",
+  "author": "<info+simpleqjs@obolus.com>",
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.413.0"
