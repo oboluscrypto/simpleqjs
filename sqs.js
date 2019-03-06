@@ -1,7 +1,9 @@
+const AWS = require('aws-sdk');
+//const {config}  = require("./localhost.config")
+
 class SQS {
     constructor(config, queueURL) {
-        //const {config}  = require("./localhost.config")
-        const AWS = require('aws-sdk');
+
         // Set the region:
         AWS.config.update({region: config.aws.region});
 
@@ -15,8 +17,8 @@ class SQS {
     }
 
     makeid(n = 5) {
-        var text = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let text = "";
+        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         for (var i = 0; i < n; i++)
             text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -25,7 +27,7 @@ class SQS {
     }
 
     send(MessageBody, msgAttr={}, groupID="genericGroud") {
-        var params = {
+        let params = {
             MessageGroupId: groupID,
             MessageDeduplicationId: `${this.makeid(32)}`,
             //DelaySeconds: "10",
@@ -58,6 +60,28 @@ class SQS {
 
     }
 
+    deleteBatch(data){
+        let messages = data.Messages;
+
+        if (! messages){
+            console.log("Nothing to delete...", err)
+            return;
+        }
+
+        let receipt_handle_list = [];
+        let ID = 0;
+        while (messages.length > 0) {
+            let msg = messages.shift();
+            ID += 1;
+            receipt_handle_list.push({"Id": toString(ID), "ReceiptHandle": msg["ReceiptHandle"]})
+            if ( (receipt_handle_list.length === 10) || (messages.length === 0) ){
+                this.sqs.deleteMessageBatch({QueueUrl:this.queueURL, Entries:receipt_handle_list})
+                receipt_handle_list = [];
+                ID = 0
+            }
+        }
+    }
+
     receiveCB(msgProcessorCB, err, data) {
         msgProcessorCB(data,err);
         console.log("No problem while processing the data.")
@@ -65,7 +89,7 @@ class SQS {
             console.log("Receive Error", err);
         } else if (data.Messages) {
             console.log("Deleting the Msgs")
-            this.deleteMsg(data)
+            this.deleteBatch(data)
         }
     };
 

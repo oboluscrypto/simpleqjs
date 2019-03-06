@@ -36,8 +36,9 @@ Max 300 TPS on FIFO queues per action. Can go to 3k in batch. Limit of 100k+ for
 20K Max number of in flight messages (messages read but not deleted) per Q in FIFO. Non FIFO limit is 120k
 
 
-
-# DeDuplicationID:
+## SQS Documentation in AWS:
+   https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteMessageBatch.html
+## DeDuplicationID:
 If a message with a particular message deduplication ID is sent successfully,
 any messages sent with the same message deduplication ID are accepted successfully but
 aren't delivered during the 5-minute deduplication interval.
