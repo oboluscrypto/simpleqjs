@@ -26,7 +26,7 @@ class SQS {
         return text;
     }
 
-    send(MessageBody, msgAttr={}, groupID="genericGroud") {
+    send(MessageBody, msgAttr={}, groupID="genericGroud", callback) {
         let params = {
             MessageGroupId: groupID,
             MessageDeduplicationId: `${this.makeid(32)}`,
@@ -41,6 +41,7 @@ class SQS {
                 console.log("Error", err);
             } else {
                 console.log(`Sent to Group ${groupID} on Queue: ${Q_name}`);
+                if (callback){ callback(data)}
             }
         });
     }
